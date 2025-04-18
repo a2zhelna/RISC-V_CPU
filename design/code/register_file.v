@@ -34,8 +34,6 @@ initial begin
 end
 
 //Combinational reads of register contents
-// assign data_rs1 = register[31:0][addr_rs1];
-// assign data_rs2 = register[31:0][addr_rs2];
 
 always @(posedge clock) begin
     if (reset) begin
