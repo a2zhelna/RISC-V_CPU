@@ -1,1 +1,3 @@
 # RISC-V_CPU
+
+RISC-V CPU ECE 320 Lab Project
