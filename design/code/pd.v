@@ -262,9 +262,7 @@ always @(posedge clock) begin
       x_funct3 <= 0;
       x_funct7 <= 0;
       x_imm <= 0; 
-      //x_data_rs1 <= 0;
-      //x_data_rs2 <= 0;
-
+      
       x_mem_read_write <= 0;
       x_reg_write_enable <= 0;
       x_mem_or_alu <= 1;
@@ -279,8 +277,6 @@ always @(posedge clock) begin
       x_funct3 <= 0;
       x_funct7 <= 0;
       x_imm <= 0; 
-      //x_data_rs1 <= 0;
-      //x_data_rs2 <= 0;
 
       x_mem_read_write <= 0;
       x_reg_write_enable <= 0;
@@ -295,8 +291,6 @@ always @(posedge clock) begin
       x_funct3 <= d_funct3;
       x_funct7 <= d_funct7;
       x_imm <= d_imm; 
-      //x_data_rs1 <= d_data_rs1;
-      //x_data_rs2 <= d_data_rs2;
 
       x_mem_read_write <= d_mem_read_write;     //Signals that tell mem & wb stage what to do
       x_reg_write_enable <= d_reg_write_enable;
@@ -334,15 +328,6 @@ always @(posedge clock) begin
     w_funct3 <= m_funct3;
 
     w_rd <= m_rd;
-    
-    // --------
-    //Next steps: 
-    //  Double check interconnections, 
-    //  Implement Bypassing
-    //    - forward register indices (as in piazza post)
-    // --------
-
-
 
     //Ensure branch has priority over a stall!
     //A stall happens in D, branches occur in X (due to earlier instr)
@@ -354,11 +339,7 @@ always @(posedge clock) begin
     end
     else begin
       //Increment PC
-      i_address <= i_address + 4;         //
-      //"Note that there is also a PC+4 component in the memory stage.
-      //You should implement that here or in the writeback stage."
-      //It's implemented here... we can consider this to be in the WB stage... 
-      //though it doesn't really matter as its a single-cycle processor
+      i_address <= i_address + 4;
     end
   end
 end
@@ -408,14 +389,8 @@ always @(*) begin
     x_data_rs2_f = x_data_rs2;
   end
 
-  // --- Bypassing to M stage (might not be needed...)
+  // --- Bypassing to M stage 
   //Rs1 is part of the offset. It should only be forwarded to the X stage
-  // if (m_rs1 == w_rd) begin
-  //   m_data_rs1_f = w_data_rd;
-  // end
-  // else begin
-  //   m_data_rs1_f = m_data_rs1;
-  // end
   if (m_rs2 == 0) begin
     //Do not forward data
     m_data_rs2_f = 0;
