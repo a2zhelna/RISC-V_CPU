@@ -52,11 +52,6 @@ always @(*) begin
     case (opcode[6:2])
         5'b01100 : begin
         //R
-            // rd = instr[11:7];
-            // funct3 = instr[14:12];
-            // rs1 = instr[19:15];
-            // rs2 = instr[24:20];
-            // funct7 = instr[31:25];
         end
         5'b00100:begin
         //I (specific case involving instructions who's format is differentiated by funct3)
@@ -64,17 +59,10 @@ always @(*) begin
             case(instr[14:12])
                 3'b001 , 3'b101 : begin
                 //Case that it is a SLLI, SRLI or SRAI
-                    // rd = instr[11:7];
-                    // funct3 = instr[14:12];
-                    // rs1 = instr[19:15];
                     shamt = instr[24:20];
                     imm = { {20{instr[31]}}, instr[31:20] };
-                    // funct7 = instr[31:25];
                 end
                 default : begin
-                    // rd = instr[11:7];
-                    // funct3 = instr[14:12];
-                    // rs1 = instr[19:15];
                     imm = { {20{instr[31]}}, instr[31:20] };     //Sign extension using Concatenation_Operator( Replication_Operator(MSB), VALUE )
                 end
             endcase
@@ -82,17 +70,11 @@ always @(*) begin
         5'b11001, 5'b00000:begin
         //I (remaining cases, excluding ECALL)
             rs2 = 0;    //DC set in golden
-            // rd = instr[11:7];
-            // funct3 = instr[14:12];
-            // rs1 = instr[19:15];
             imm = { {20{instr[31]}}, instr[31:20] };
         end
         5'b11100:begin
         //I (ECALL)
         //This doesn't change anything; can remove this case
-            // rd = 0;
-            // funct3 = 0;
-            // rs1 = 0;
             imm = 0;
             shamt = 0;
         end
@@ -100,21 +82,14 @@ always @(*) begin
         //S
             imm = { {20{instr[31]}}, instr[31:25], instr[11:7] };
             rd = 0;     //Edge case where store imm value can be a register of a following instr, causing a stall
-            // funct3 = instr[14:12];
-            // rs1 = instr[19:15];
-            // rs2 = instr[24:20];
         end
         5'b11000 :begin
         //B
             rd = 0;    //DC set in golden
             imm = { {19{instr[31]}}, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0 };
-            // funct3 = instr[14:12];
-            // rs1 = instr[19:15];
-            // rs2 = instr[24:20];
         end
         5'b11011 :begin
         //J
-            // rd = instr[11:7];
             rs2 = 0;
             imm = { {11{instr[31]}},  instr[31], instr[19:12], instr[20], instr[30:21], 1'b0 };
         end
@@ -122,7 +97,6 @@ always @(*) begin
         //U
             rs1 = 0;    //DC set in golden
             rs2 = 0;    // ^
-            // rd = instr[11:7];
             imm = { instr[31:12], {12{1'b0}} };
         end
         default : begin
